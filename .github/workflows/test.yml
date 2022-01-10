@@ -1,0 +1,67 @@
+name: Reusable workflow example
+on:
+  workflow_call:
+jobs:
+  test-1:
+    name: game is valid - allow user to move
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}
+    steps:
+      - name: setup
+        run: |
+          # delete issues
+          ...
+          
+          # readme - current board positions, next steps, last moves, top movers
+          ...
+          
+          # PGN game file
+          ...
+          
+          # issues
+          ...
+          
+          # stats
+          ...
+
+          # game is valid - allow user to move
+          gh issue create ... 'chess|move|xxx'
+          ...
+
+      - name: run
+        run: |
+          # somehow, wait for the workflow associated with the issue to complete
+          ...
+
+      - name: assertions
+        run: |
+          # issue reactions as expected
+          ...
+          if failed; then
+            exit 1
+          fi
+
+          # issue comments as expected
+          ...
+          if failed; then
+            exit 1
+          fi
+
+          # issue status as expected
+          ...
+          if failed; then
+            exit 1
+          fi
+
+          # game file as expected
+          ...
+          if failed; then
+            exit 1
+          fi
+
+          # stats file as expected
+          ...
+          if failed; then
+            exit 1
+          fi
