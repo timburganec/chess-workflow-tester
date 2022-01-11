@@ -28,7 +28,7 @@ which will return PASS or FAIL.
 10. force new game midway through via other person
 11. force new game when gameover via other person
 12. stats populated correctly from existing issues
-13. 
+13. high score populated correctly from existing issues
 
 ### ASSERRTIONS
 
