@@ -67,9 +67,18 @@ jobs:
           # There's no easy way I know to do this, see https://github.com/timburgan/personal/issues/17
           # So.. fuzzy match: List created from issues in last 5 minutes, currently in_progress, select the latest
           rm -f run_id
-          gh run list --json 'event,createdAt,conclusion,status,url' | 
-            jq '[ .[] | select(.event == "issues" and .status == "in_progress" and select(.createdAt | fromdateiso8601 > now - 301)) ][0].url' -r |
-            awk -F'/' '{print $NF}' > run_id
+          
+          every 3 seconds for a max of 10 times, do
+          
+            gh run list --json 'event,createdAt,conclusion,status,url' | 
+              jq '[ .[] | select(.event == "issues" and .status == "in_progress" and select(.createdAt | fromdateiso8601 > now - 301)) ][0].url' -r |
+              awk -F'/' '{print $NF}' > run_id
+
+          end
+          
+          if run_id empty
+            exit 1
+          fi
 
           # wait until that workflow run is finished
           gh run watch $(cat run_id)
