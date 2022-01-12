@@ -21,7 +21,8 @@ jobs:
         run: cat tests/${{ matrix.scenario }}/_name
       - name: setup
         run: |
-          gh auth login
+          gh auth status
+          exit 1
         
           # delete all issues
           PAGER= gh issue list --state all --state all | awk '{print $1}' > issue_ids
