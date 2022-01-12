@@ -14,7 +14,7 @@ jobs:
     continue-on-error: false
     steps:
       - name: name
-        run: cat ${{ matrix.scenario }}.name
+        run: cat ${{ matrix.scenario }}/_name
       - name: setup
         run: |
           # delete all issues
