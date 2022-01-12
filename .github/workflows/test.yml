@@ -24,7 +24,7 @@ jobs:
       - name: setup
         run: |
           # delete all issues
-          PAGER= gh issue list --state all --state all | awk '{print $1}' > issue_ids
+          PAGER= gh issue list --state all | awk '{print $1}' > issue_ids
           cat issue_ids | while read issue_id; do gh issue delete $issue_id; done
           
           # PGN game file
