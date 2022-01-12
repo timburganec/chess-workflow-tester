@@ -1,6 +1,8 @@
 name: run test scenarios
 on:
   workflow_call:
+env:
+  GITHUB_TOKEN: ${{ secrets.TOKEN }}
 jobs:
   tests:
     strategy:
