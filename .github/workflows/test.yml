@@ -3,6 +3,7 @@ on:
   workflow_call:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_REPO: ${{ env.GITHUB_REPOSITORY }}
 jobs:
   tests:
     strategy:
@@ -14,8 +15,6 @@ jobs:
     concurrency:
       group: ${{ github.ref }}
     continue-on-error: false
-    env:
-      GH_REPO: ${{ env.GITHUB_REPOSITORY }}
     steps:
       - uses: actions/checkout@v2
         with:
