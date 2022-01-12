@@ -23,6 +23,8 @@ jobs:
         run: cat tests/${{ matrix.scenario }}/_name
       - name: setup
         run: |
+          brew update gh
+          
           # delete all issues
           PAGER= gh issue list --state all | awk '{print $1}' > issue_ids
           cat issue_ids | while read issue_id; do gh issue delete $issue_id; done
