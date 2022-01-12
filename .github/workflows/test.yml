@@ -24,6 +24,8 @@ jobs:
         run: cat tests/${{ matrix.scenario }}/_name
       - name: setup
         run: |
+          set -xe
+        
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
           sudo apt update
@@ -59,6 +61,8 @@ jobs:
 
       - name: run
         run: |
+          set -xe
+          
           # Find workflow related to the issue_id above.
           # There's no easy way I know to do this, see https://github.com/timburgan/personal/issues/17
           # So.. fuzzy match: List created from issues in last 5 minutes, currently in_progress, select the latest
@@ -78,6 +82,8 @@ jobs:
 
       - name: assertions
         run: |
+          set -xe
+          
           rm -f issue
           gh issue view $(cat issue_id) --json 'author,comments,reactionGroups,state' > issue
 
