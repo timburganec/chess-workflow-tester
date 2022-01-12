@@ -21,6 +21,8 @@ jobs:
         run: cat tests/${{ matrix.scenario }}/_name
       - name: setup
         run: |
+          gh auth login
+        
           # delete all issues
           PAGER= gh issue list --state all --state all | awk '{print $1}' > issue_ids
           cat issue_ids | while read issue_id; do gh issue delete $issue_id; done
@@ -47,7 +49,7 @@ jobs:
 
           # game is valid - allow user to move
           rm -f issue_id
-          gh issue create --title "$(cat tests/${{ matrix.scenario }}-setup-issue-title.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
+          gh issue create --title "$(cat tests/${{ matrix.scenario }}-issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
 
       - name: run
         run: |
