@@ -51,6 +51,8 @@ jobs:
           cp tests/${{ matrix.scenario }}/README.setup.md README.md 2>/dev/null || true
           
           # reauth as TIMBURGNA_PAT
+          gh auth logout --hostname github.com
+          gh auth status
           echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
           
           # delete all issues
