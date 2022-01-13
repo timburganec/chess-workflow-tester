@@ -57,7 +57,7 @@ jobs:
 
           # game is valid - allow user to move
           rm -f issue_id
-          gh issue create --title "$(cat tests/${{ matrix.scenario }}-issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
+          gh issue create --title "$(cat tests/${{ matrix.scenario }}/issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
 
           echo "exit: $?"
 
