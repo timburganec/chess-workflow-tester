@@ -31,10 +31,6 @@ jobs:
           sudo apt update
           sudo apt install gh
           
-          # delete all issues
-          PAGER= gh issue list --state all | awk '{print $1}' > issue_ids
-          cat issue_ids | while read issue_id; do gh issue delete $issue_id; done
-          
           # PGN game file
           rm -f chess.pgn
           cp tests/test-shared/chess.setup.pgn chess.pgn 2>/dev/null || true
@@ -54,11 +50,19 @@ jobs:
           rm -f README.md
           cp tests/test-shared/README.setup.md README.md 2>/dev/null || true
           cp tests/${{ matrix.scenario }}/README.setup.md README.md 2>/dev/null || true
+          
+          # reauth as TIMBURGNA_PAT
+          gh auth logout github.com && echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
+          
+          # delete all issues
+          PAGER= gh issue list --state all | awk '{print $1}' > issue_ids
+          cat issue_ids | while read issue_id; do gh issue delete $issue_id; done
 
           # game is valid - allow user to move
           rm -f issue_id
-          gh auth logout github.com && echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
           gh issue create --title "$(cat tests/${{ matrix.scenario }}/issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
+          
+          # reauth as GITHUB_TOKEN
           gh auth logout github.com && echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: run
