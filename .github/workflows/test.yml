@@ -50,8 +50,7 @@ jobs:
           cp tests/test-shared/README.setup.md README.md 2>/dev/null || true
           cp tests/${{ matrix.scenario }}/README.setup.md README.md 2>/dev/null || true
           
-          # reauth as TIMBURGNA_PAT
-          echo "${{ secrets.TIMBURGAN_PAT }}"
+          # reauth as TIMBURGAN_PAT
           echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
           
           # delete all issues
