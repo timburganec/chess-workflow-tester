@@ -51,8 +51,8 @@ jobs:
           cp tests/${{ matrix.scenario }}/README.setup.md README.md 2>/dev/null || true
           
           # reauth as TIMBURGNA_PAT
+          echo "${{ secrets.TIMBURGAN_PAT }}"
           echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
-          gh auth status
           
           # delete all issues
           PAGER= gh issue list --state all | awk '{print $1}' > issue_ids
