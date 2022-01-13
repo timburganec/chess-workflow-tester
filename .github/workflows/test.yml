@@ -52,7 +52,7 @@ jobs:
           cp tests/${{ matrix.scenario }}/README.setup.md README.md 2>/dev/null || true
           
           # reauth as TIMBURGNA_PAT
-          gh auth logout github.com
+          gh auth logout --hostname github.com
           echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
           
           # delete all issues
@@ -64,7 +64,7 @@ jobs:
           gh issue create --title "$(cat tests/${{ matrix.scenario }}/issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
           
           # reauth as GITHUB_TOKEN
-          gh auth logout github.com
+          gh auth logout --hostname github.com
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: run
