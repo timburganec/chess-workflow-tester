@@ -57,9 +57,9 @@ jobs:
 
           # game is valid - allow user to move
           rm -f issue_id
-          gh auth logout && echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
+          gh auth logout github.com && echo "${{ secrets.TIMBURGAN_PAT }}" | gh auth login --with-token
           gh issue create --title "$(cat tests/${{ matrix.scenario }}/issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
-          gh auth logout && echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          gh auth logout github.com && echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: run
         run: |
