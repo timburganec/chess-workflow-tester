@@ -59,6 +59,8 @@ jobs:
           rm -f issue_id
           gh issue create --title "$(cat tests/${{ matrix.scenario }}-issue-title.setup.txt)" --body 'meh' | awk -F'/' '{print $NF}' > issue_id
 
+          echo "exit: $?"
+
       - name: run
         run: |
           set -xe
@@ -66,19 +68,21 @@ jobs:
           # Find workflow related to the issue_id above.
           # There's no easy way I know to do this, see https://github.com/timburgan/personal/issues/17
           # So.. fuzzy match: List created from issues in last 5 minutes, currently in_progress, select the latest
-          rm -f run_id
-          
-          every 3 seconds for a max of 10 times, do
+          rm -f run_id ; touch run_id
+
+          max_retry=10
+          counter=0
+          until $(wc -m run_id)
+          do
+            sleep 3
+            [[ counter -eq $max_retry ]] && echo "FAILED: No running workflow found." && exit 1
+            ((counter++))
+            echo "Checking for running workflow..."
           
             gh run list --json 'event,createdAt,conclusion,status,url' | 
-              jq '[ .[] | select(.event == "issues" and .status == "in_progress" and select(.createdAt | fromdateiso8601 > now - 301)) ][0].url' -r |
+              jq '[ .[] | select(.event == "issues" and (.status == "queued" or .status == "in_progress") and select(.createdAt | fromdateiso8601 > now - 301)) ][0].url' -r |
               awk -F'/' '{print $NF}' > run_id
-
-          end
-          
-          if run_id empty
-            exit 1
-          fi
+          done
 
           # wait until that workflow run is finished
           gh run watch $(cat run_id)
